@@ -35,6 +35,7 @@ TELEGRAM_TOKEN = "7870598281:AAHNWpT6tVcoVA_6MhYnkAX3XoXAIY21teg"  # <-- Replace
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 CREDENTIALS_FILE = "/etc/secrets/credentials.json"  # <-- Place this in the same directory
 
+DRIVE_FOLDER_ID = ""
 drive_service = None
 
 from google.oauth2.service_account import Credentials
@@ -52,6 +53,8 @@ def upload_to_drive(file_path, file_name):
             logger.error("Google Drive service not available.")
             return None
         file_metadata = {"name": file_name}
+        if DRIVE_FOLDER_ID:
+             file_metadata["parents"] = [DRIVE_FOLDER_ID]
         media = MediaFileUpload(file_path, resumable=True)
         file = drive_service.files().create(
             body=file_metadata, media_body=media, fields="id"
