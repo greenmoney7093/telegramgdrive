@@ -1,3 +1,4 @@
+import imghdr
 import pkg_resources
 print("google-auth-oauthlib version:", pkg_resources.get_distribution("google-auth-oauthlib").version)
 
