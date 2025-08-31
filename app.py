@@ -2,8 +2,8 @@
 import pkg_resources
 print("google-auth-oauthlib version:", pkg_resources.get_distribution("google-auth-oauthlib").version)
 
-from google_auth_oauthlib.flow import InstalledAppFlow
-print("InstalledAppFlow dir:", dir(InstalledAppFlow))
+
+
 import google_auth_oauthlib
 print("google-auth-oauthlib version:")
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -39,25 +39,17 @@ CREDENTIALS_FILE = "credentials.json"  # <-- Place this in the same directory
 
 drive_service = None
 
-def get_drive_service():
-    global drive_service
-    logger.info("Starting Google Drive authentication flow.")
-    try:
-        flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-        creds = flow.run_console()  # <--- Use this for Render/cloud/headless environments
-        drive_service = build("drive", "v3", credentials=creds)
-        logger.info("Google Drive service built successfully.")
-        return drive_service
-    except Exception as e:
-        logger.error(f"Failed to authenticate with Google Drive: {e}")
-        return None
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+
+# Authenticate using service account
+creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
+drive_service = build("drive", "v3", credentials=creds)
 
 def upload_to_drive(file_path, file_name):
     global drive_service
     logger.info(f"Preparing to upload {file_name} to Google Drive.")
     try:
-        if drive_service is None:
-            drive_service = get_drive_service()
         if drive_service is None:
             logger.error("Google Drive service not available.")
             return None
