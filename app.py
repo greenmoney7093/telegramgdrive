@@ -4,7 +4,7 @@ print("google-auth-oauthlib version:", pkg_resources.get_distribution("google-au
 from google_auth_oauthlib.flow import InstalledAppFlow
 print("InstalledAppFlow dir:", dir(InstalledAppFlow))
 import google_auth_oauthlib
-print("google-auth-oauthlib version:", google_auth_oauthlib.__version__)
+print("google-auth-oauthlib version:")
 from google_auth_oauthlib.flow import InstalledAppFlow
 print("InstalledAppFlow dir:", dir(InstalledAppFlow))
 import os
