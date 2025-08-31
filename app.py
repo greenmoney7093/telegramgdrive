@@ -1,4 +1,4 @@
-import imghdr
+# app.py
 import pkg_resources
 print("google-auth-oauthlib version:", pkg_resources.get_distribution("google-auth-oauthlib").version)
 
@@ -8,6 +8,7 @@ import google_auth_oauthlib
 print("google-auth-oauthlib version:")
 from google_auth_oauthlib.flow import InstalledAppFlow
 print("InstalledAppFlow dir:", dir(InstalledAppFlow))
+
 import os
 import logging
 import sys
@@ -16,6 +17,9 @@ from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
+
+# Pillow replacement for imghdr
+from PIL import Image
 
 # --- Logging setup ---
 logging.basicConfig(
@@ -68,6 +72,15 @@ def upload_to_drive(file_path, file_name):
         logger.error(f"Failed to upload file to Drive: {e}")
         return None
 
+# Pillow helper to detect image type if needed
+def get_image_type(file_path):
+    try:
+        with Image.open(file_path) as img:
+            return img.format  # 'JPEG', 'PNG', etc.
+    except Exception as e:
+        logger.warning(f"Failed to detect image type for {file_path}: {e}")
+        return None
+
 def handle_file(update: Update, context: CallbackContext):
     logger.debug("handle_file called.")
     try:
@@ -102,6 +115,10 @@ def handle_file(update: Update, context: CallbackContext):
             file = context.bot.get_file(file_id)
             file.download(custom_path=file_path)
             logger.info(f"Downloaded photo: {file_path}")
+
+            # Example: detect type using Pillow
+            img_type = get_image_type(file_path)
+            logger.info(f"Detected photo type: {img_type}")
 
         # Handle videos
         elif update.message.video:
@@ -162,7 +179,7 @@ def main():
     except Exception as e:
         logger.critical(f"Failed to start bot: {e}", exc_info=True)
 
-if __name__ == "__main__":
+if name == "__main__":
     # Suppress known warnings about urllib3 and pkg_resources for cleaner output
     import warnings
     warnings.filterwarnings("ignore")
