@@ -6,8 +6,6 @@ print("google-auth-oauthlib version:", pkg_resources.get_distribution("google-au
 
 import google_auth_oauthlib
 print("google-auth-oauthlib version:")
-from google_auth_oauthlib.flow import InstalledAppFlow
-print("InstalledAppFlow dir:", dir(InstalledAppFlow))
 
 import os
 import logging
@@ -16,7 +14,6 @@ from telegram import Update
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from google_auth_oauthlib.flow import InstalledAppFlow
 
 # Pillow replacement for imghdr
 from PIL import Image
