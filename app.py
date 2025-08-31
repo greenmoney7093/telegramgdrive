@@ -179,7 +179,7 @@ def main():
     except Exception as e:
         logger.critical(f"Failed to start bot: {e}", exc_info=True)
 
-if name == "__main__":
+if __name__ == "__main__":
     # Suppress known warnings about urllib3 and pkg_resources for cleaner output
     import warnings
     warnings.filterwarnings("ignore")
