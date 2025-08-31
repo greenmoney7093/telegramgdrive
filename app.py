@@ -39,23 +39,36 @@ CREDENTIALS_FILE = "/etc/secrets/credentials.json"  # <-- Place this in the same
 DRIVE_FOLDER_ID = "1TOxkDN6apsHRf0Bxf9DqF7SYGw2dZJ9L"
 drive_service = None
 
-from google.oauth2.service_account import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-# Authenticate using service account
-creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=SCOPES)
-drive_service = build("drive", "v3", credentials=creds)
+def get_drive_service():
+    global drive_service
+    if drive_service is not None:
+        return drive_service
+    try:
+        flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
+        creds = flow.run_local_server(port=0)  # Opens browser for authentication
+        drive_service = build("drive", "v3", credentials=creds)
+        logger.info("Google Drive service built successfully.")
+        return drive_service
+    except Exception as e:
+        logger.error(f"Failed to authenticate with Google Drive: {e}")
+        return None
 
 def upload_to_drive(file_path, file_name):
     global drive_service
+    drive_service = get_drive_service()  # Use OAuth credentials
+    if drive_service is None:
+        logger.error("Google Drive service not available.")
+        return None
+
     logger.info(f"Preparing to upload {file_name} to Google Drive.")
     try:
-        if drive_service is None:
-            logger.error("Google Drive service not available.")
-            return None
         file_metadata = {"name": file_name}
         if DRIVE_FOLDER_ID:
-             file_metadata["parents"] = [DRIVE_FOLDER_ID]
+            file_metadata["parents"] = [DRIVE_FOLDER_ID]
+
         media = MediaFileUpload(file_path, resumable=True)
         file = drive_service.files().create(
             body=file_metadata, media_body=media, fields="id"
