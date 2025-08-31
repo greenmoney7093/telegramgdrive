@@ -1,6 +1,29 @@
 # Use Python 3.12 slim image
 FROM python:3.12-slim
 
+
+# Install ntp for time sync
+RUN apt-get update && \
+    apt-get install -y ntp && \
+    apt-get clean
+
+# Enable NTP
+RUN systemctl enable ntp || true
+RUN systemctl start ntp || true
+
+# Set timezone to UTC
+RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
+
+# Copy your bot code
+WORKDIR /app
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Start bot
+CMD ["python", "app.py"]
+
 # Set working directory inside container
 WORKDIR /app
 
