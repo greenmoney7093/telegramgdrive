@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 # --- Configuration ---
 TELEGRAM_TOKEN = "7870598281:AAHNWpT6tVcoVA_6MhYnkAX3XoXAIY21teg"  # <-- Replace with your token
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
-CREDENTIALS_FILE = "credentials.json"  # <-- Place this in the same directory
+CREDENTIALS_FILE = "/etc/secrets/credentials.json"  # <-- Place this in the same directory
 
 DRIVE_FOLDER_ID = "1TOxkDN6apsHRf0Bxf9DqF7SYGw2dZJ9L"
 drive_service = None
