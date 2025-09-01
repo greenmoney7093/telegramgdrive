@@ -130,7 +130,7 @@ async def handle_file(event):
         # Download with progress updates
         downloaded = 0
         total = event.message.file.size or 1
-        async for chunk in client.iter_download(event.message, file=file_path, chunk_size=5*1024*1024):
+        async for chunk in client.iter_download(event.message, file=none, chunk_size=5*1024*1024):
             downloaded += len(chunk)
             percent = int(downloaded / total * 100)
             await progress_msg.edit(f"Downloading {file_name}: {percent}%")
@@ -161,7 +161,7 @@ async def keep_alive():
             await client.send_message(TARGET_CHAT_ID, "💤 Keeping Render awake...")
         except Exception as e:
             print(f"Error sending keep-alive message: {e}")
-        await asyncio.sleep(10)
+        await asyncio.sleep(30)
 
 async def main():
     await client.start(bot_token=TELEGRAM_BOT_TOKEN)
