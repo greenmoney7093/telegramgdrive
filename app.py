@@ -30,7 +30,7 @@ api_id = 24305862       # replace with your API ID
 api_hash = "9c83a1f28298af42fc1647664b6489ae"  # replace with your API hash
 TELEGRAM_BOT_TOKEN = "7870598281:AAHNWpT6tVcoVA_6MhYnkAX3XoXAIY21teg"
 TARGET_CHAT_ID = 1003118263
-downloads_dir = "downloads"
+downloads_dir = "/tmp/downloads"
 
 # --- Logging setup ---
 logging.basicConfig(
