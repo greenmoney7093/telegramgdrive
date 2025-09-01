@@ -130,7 +130,7 @@ async def handle_file(event):
         # Download with progress updates
         downloaded = 0
         total = event.message.file.size or 1
-        async for chunk in client.iter_download(event.message, file=none, chunk_size=5*1024*1024):
+        async for chunk in client.iter_download(event.message, file=None, chunk_size=5*1024*1024):
             downloaded += len(chunk)
             percent = int(downloaded / total * 100)
             await progress_msg.edit(f"Downloading {file_name}: {percent}%")
