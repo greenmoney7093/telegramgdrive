@@ -23,7 +23,8 @@ RUN pip install --no-cache-dir \
     Pillow \
     six \
     "urllib3<1.27"
-    telethon
+    
+RUN  pip install telethon
 
 # Set environment variables (replace with your actual secrets in Render dashboard)
 ENV TELEGRAM_TOKEN="YOUR_BOT_TOKEN"
