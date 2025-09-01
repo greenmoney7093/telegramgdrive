@@ -121,8 +121,8 @@ async def handle_file(event):
             return
 
         os.makedirs(downloads_dir, exist_ok=True)
-        file_path = os.path.join(downloads_dir, f"temp_{event.message.id}")
-        file_name = event.message.file.name or f"file_{event.message.id}"
+        file_path = await client.download_media(event.message, downloads_dir)
+        file_name = os.path.basename(file_path)
 
         # Progress message for Telegram
         progress_msg = await event.reply(f"Downloading {file_name}: 0%")
