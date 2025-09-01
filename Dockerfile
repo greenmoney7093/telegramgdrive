@@ -25,6 +25,7 @@ RUN pip install --no-cache-dir \
     "urllib3<1.27"
     
 RUN  pip install telethon
+RUN pip install cryptg
 
 # Set environment variables (replace with your actual secrets in Render dashboard)
 ENV TELEGRAM_TOKEN="YOUR_BOT_TOKEN"
