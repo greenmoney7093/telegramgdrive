@@ -161,7 +161,7 @@ async def keep_alive():
             await client.send_message(TARGET_CHAT_ID, "💤 Keeping Render awake...")
         except Exception as e:
             print(f"Error sending keep-alive message: {e}")
-        await asyncio.sleep(30)
+        await asyncio.sleep(10)
 
 async def main():
     await client.start(bot_token=TELEGRAM_BOT_TOKEN)
