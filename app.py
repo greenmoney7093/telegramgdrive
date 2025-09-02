@@ -16,6 +16,7 @@ from google.auth.transport.requests import Request
 import pickle
 from PIL import Image
 import asyncio
+from aiohttp import web
 
 # --- Telethon setup ---
 try:
@@ -154,20 +155,28 @@ async def handle_file(event):
         logger.error(f"Error in handle_file: {e}", exc_info=True)
         await event.reply(f"Error: {e}")
 
-# Keep Render alive
-async def keep_alive():
+async def handle(request):
+    return web.Response(text="Bot is running!")
+
+app = web.Application()
+app.add_routes([web.get("/", handle)])
+
+async def start_server():
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", int(os.environ.get("PORT", 10000)))
+    await site.start()
+    print(f"Web server running on port {os.environ.get('PORT', 10000)}")
+    
+    # Keep the server running forever
     while True:
-        try:
-            await client.send_message(TARGET_CHAT_ID, "💤 Keeping Render awake...")
-        except Exception as e:
-            print(f"Error sending keep-alive message: {e}")
-        await asyncio.sleep(10)
+        await asyncio.sleep(3600)
 
 async def main():
     await client.start(bot_token=TELEGRAM_BOT_TOKEN)
     await asyncio.gather(
         client.run_until_disconnected(),
-        keep_alive()
+        start_server()
     )
 
 if __name__ == "__main__":
